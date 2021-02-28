@@ -1,133 +1,47 @@
 <template>
-  <div id="home" class="wrapper">
+  <div id="home">
+    <!--    导航条-->
+    <nav-bar class="home-nav">
+      <div slot="center">购物车</div>
+    </nav-bar>
 
-<!--    导航条-->
-    <nav-bar class="home-nav"><div slot="center">购物车</div></nav-bar>
+    <tab-control v-show="isTabFixed" class="tab-controll" ref="tabControll1" v-on:tabClick="tabClick_current"
+                 :titles="['流行', '新款', '精选']"></tab-control>
 
-<!--  父组件把 "banners" 父组件的变量传递给子组件的变量，子组件用以下的接收
-props: {
-    banners: {
-      type: Array,
-      default() {
-        return []
-      }
-    }
-  },
--->
-<!--    轮播图-->
-    <home-swiper :banners="banners"></home-swiper>
+    <scroll ref="scroll" class="content"
+            v-on:scroll="contentScroll"
+            v-bind:probe-type="3"
+            v-bind:pull-up-load="true"
+            v-on:pullingUp="loadMore">
+      <!--  父组件把 "banners" 父组件的变量传递给子组件的变量，子组件用以下的接收
+          props: {
+              banners: {
+                type: Array,
+                default() {
+                  return []
+                }
+              }
+            },
+          -->
+      <!--    轮播图-->
+      <home-swiper v-on:SwiperImageLoad="swiperImageLoad" :banners="banners"></home-swiper>
 
-<!--  轮播图下面一行  -->
-    <recommend-view :recommends="recommends"></recommend-view>
+      <!--  轮播图下面一行  -->
+      <recommend-view :recommends="recommends"></recommend-view>
 
-<!--    本周流行-->
-    <feature-view></feature-view>
+      <!--    本周流行-->
+      <feature-view></feature-view>
 
-    <tab-control class="tab-control" :titles="['流行', '新款', '精选']"></tab-control>
+      <!--   this.$emit('tabClick', index)  v-on:tabClick="tabClick_current"  前面的是子组件定义的名字， 后面是当前父组件定义的事件方法-->
+      <tab-control ref="tabControll2" v-on:tabClick="tabClick_current" class="tab-controll"
+                   :titles="['流行', '新款', '精选']"></tab-control>
 
-    <ul>
-      <li>列表1</li>
-      <li>列表2</li>
-      <li>列表3</li>
-      <li>列表4</li>
-      <li>列表5</li>
-      <li>列表6</li>
-      <li>列表7</li>
-      <li>列表8</li>
-      <li>列表9</li>
-      <li>列表10</li>
-      <li>列表11</li>
-      <li>列表12</li>
-      <li>列表13</li>
-      <li>列表14</li>
-      <li>列表15</li>
-      <li>列表16</li>
-      <li>列表17</li>
-      <li>列表18</li>
-      <li>列表19</li>
-      <li>列表20</li>
-      <li>列表21</li>
-      <li>列表22</li>
-      <li>列表23</li>
-      <li>列表24</li>
-      <li>列表25</li>
-      <li>列表26</li>
-      <li>列表27</li>
-      <li>列表28</li>
-      <li>列表29</li>
-      <li>列表30</li>
-      <li>列表31</li>
-      <li>列表32</li>
-      <li>列表33</li>
-      <li>列表34</li>
-      <li>列表35</li>
-      <li>列表36</li>
-      <li>列表37</li>
-      <li>列表38</li>
-      <li>列表39</li>
-      <li>列表40</li>
-      <li>列表41</li>
-      <li>列表42</li>
-      <li>列表43</li>
-      <li>列表44</li>
-      <li>列表45</li>
-      <li>列表46</li>
-      <li>列表47</li>
-      <li>列表48</li>
-      <li>列表49</li>
-      <li>列表50</li>
-      <li>列表51</li>
-      <li>列表52</li>
-      <li>列表53</li>
-      <li>列表54</li>
-      <li>列表55</li>
-      <li>列表56</li>
-      <li>列表57</li>
-      <li>列表58</li>
-      <li>列表59</li>
-      <li>列表60</li>
-      <li>列表61</li>
-      <li>列表62</li>
-      <li>列表63</li>
-      <li>列表64</li>
-      <li>列表65</li>
-      <li>列表66</li>
-      <li>列表67</li>
-      <li>列表68</li>
-      <li>列表69</li>
-      <li>列表70</li>
-      <li>列表71</li>
-      <li>列表72</li>
-      <li>列表73</li>
-      <li>列表74</li>
-      <li>列表75</li>
-      <li>列表76</li>
-      <li>列表77</li>
-      <li>列表78</li>
-      <li>列表79</li>
-      <li>列表80</li>
-      <li>列表81</li>
-      <li>列表82</li>
-      <li>列表83</li>
-      <li>列表84</li>
-      <li>列表85</li>
-      <li>列表86</li>
-      <li>列表87</li>
-      <li>列表88</li>
-      <li>列表89</li>
-      <li>列表90</li>
-      <li>列表91</li>
-      <li>列表92</li>
-      <li>列表93</li>
-      <li>列表94</li>
-      <li>列表95</li>
-      <li>列表96</li>
-      <li>列表97</li>
-      <li>列表98</li>
-      <li>列表99</li>
-      <li>列表100</li>
-    </ul>
+      <!-- '流行', '新款', '精选 的详情，点击不同的字，显示不同的内容-->
+      <goods-list :goods="showGoods"></goods-list>
+    </scroll>
 
+    <!-- 右下角向上箭头   组件要事件监听，需要添加.native-->
+    <back-top v-on:click.native="backClick" v-show="isShowBackTop"/>
   </div>
 </template>
 
@@ -138,16 +52,19 @@ import FeatureView from "@/views/home/childComps/FeatureView";
 
 import NavBar from '@/components/common/navbar/NavBar'
 import TabControl from "@/components/content/tabControl/TabControl";
+import GoodsList from "@/components/content/goods/GoodsList";
 
 //{} 必须export default 导出的才可以取消
-import {getHomeMultidata} from "@/network/home";
+import {getHomeMultidata, getHomeGoods} from "@/network/home";
+import Scroll from "@/components/common/scroll/Scroll";
+
+import BackTop from "@/components/content/backTop/BackTop";
 
 //=================================================================
 /*
 import Swiper from "@/components/common/swiper/Swiper";
 import SwiperItem from "@/components/common/swiper/SwiperItem";
-*/
-/* index.js 文件
+ index.js 文件
  import Swiper from './Swiper'
  import SwiperItem from './SwiperItem'
  export {
@@ -156,19 +73,25 @@ import SwiperItem from "@/components/common/swiper/SwiperItem";
  */
 // 那样话，可以直接这样导出使用，不用写两行了
 import {Swiper, SwiperItem} from "@/components/common/swiper"
+import BScroll from "@better-scroll/core";
 //=================================================================
 
 
 export default {
   name: 'Home',
   components: {
+    BackTop,
     HomeSwiper,
     RecommendView,
     FeatureView,
 
     NavBar,
-    TabControl
-  }, data() {
+    TabControl,
+
+    GoodsList,
+    Scroll
+  },
+  data() {
     /**
      * 为何在大型项目中data需要使用return返回数据呢？
      * 原因：不使用return包裹的数据会在项目的全局可见，会造成变量污染
@@ -177,18 +100,137 @@ export default {
     return {
       // 异步请求的数据封装到这里
       banners: [],
-      recommends: []
+      recommends: [],
+      goods: {
+        "pop": {page: 0, list: []},   // 流行
+        "new": {page: 0, list: []},  // 新款
+        "sell": {page: 0, list: []}   // 精选
+      },
+      currentType: 'pop',
+      isShowBackTop: false,
+      tabOffsetTop: 0,
+      isTabFixed: false,
+      saveY: 0
     }
-  }, created() { // 生命周期
+  },
+  computed: {
+    showGoods() {
+      return this.goods[this.currentType].list
+    }
+  },
+  created() {
+    // 生命周期
     // 创建完组件发送网络请求
-    getHomeMultidata().then(result => {
-      console.log(result)
-      this.banners = result.data.banner.list; // 回掉函数执行完，需要把结果保存到变量里使用，不保存函数结束变量都清空了
-      this.recommends = result.data.recommend.list
+    this.getHomeMultidata()
 
+    // 请求商品数据
+    this.getHomeGoods("pop")
+    this.getHomeGoods("new")
+    this.getHomeGoods("sell")
+
+    //console.log(this) // 当前这个页面的Vue组件对象
+  },
+  mounted() {
+    // 监听item中图片加载完成, 因为部分dom组件没有加载，所以不再created生命周期用，在mounted生命周期用
+    let debounce = this.debounce(this.$refs.scroll.refresh, 500);
+    this.$bus.$on('itemImageLoad', () => {
+      debounce.refresh("参数")
     })
+  },
+  activated() {
+    this.$refs.scroll.scroll.scrollTo(0, this.saveY)
+    this.$refs.scroll.refresh()
+  },
+  deactivated() {
+    this.saveY = this.$refs.scroll.scroll.y
+  },
+  methods: {
+    // 防抖处理
+    /**
+     * 延迟回掉
+     * @param callback
+     * @param delay 延迟多久回调
+     */
+    debounce(callback, delay) {
+      let timer = null;
+      return {
+        refresh(...args) {
+          if (timer) {
+            clearTimeout(timer)
+          }
+          timer = setTimeout(() => {
+            callback.apply(this, args) // 调用函数，把当前this对象，传递给调用的函数的this
+          }, delay)
+        }
+      }
+    },
 
-    console.log(this) // 当前这个页面的Vue组件对象
+    swiperImageLoad() {
+      // 获取tabControll的offsetTop
+      this.tabOffsetTop = this.$refs.tabControll2.$el.offsetTop
+    },
+
+    // 事件监听相关的方法
+    tabClick_current(index) {
+      switch (index) {
+        case 0:
+          this.currentType = 'pop'
+          break
+        case 1:
+          this.currentType = 'new'
+          break
+        case 2:
+          this.currentType = 'sell'
+          break
+      }
+      this.$refs.tabControll1.currentIndex = index
+      this.$refs.tabControll2.currentIndex = index
+    },
+    backClick() {
+      // 拿到scroll 组件里面的scroll 引用的对象, 调用scrollTo方法
+      this.$refs.scroll.scroll.scrollTo(0, 0, 500)
+    },
+
+    // 监听滚动
+    contentScroll(position) {
+      // 判断backtop是否显示
+      this.isShowBackTop = (-position.y) > 1000
+
+      // 决定tabControl是否吸顶
+      this.isTabFixed = (-position.y) > this.tabOffsetTop
+    },
+
+    // 下拉加载
+    loadMore() {
+      this.getHomeGoods(this.currentType)
+
+      // 异步图片还没加载完， 后来加载完了，撑大了，需要刷新以下，重新计算高度，就可以了
+      this.$refs.scroll.refresh()
+    },
+
+    // 网络请求相关的方法
+    getHomeMultidata() {
+      getHomeMultidata().then(result => {
+        // console.log(result)
+        this.banners = result.data.banner.list; // 回掉函数执行完，需要把结果保存到变量里使用，不保存函数结束变量都清空了
+        this.recommends = result.data.recommend.list
+      })
+    },
+    getHomeGoods(type) {
+      const page = this.goods[type].page + 1
+      getHomeGoods(type, page).then(result => {
+        // console.log(result)
+
+        // console.log(result.data.list)
+
+        // result.data.list 获取的数组， ... 相当于一个一个拿出来，push到另一个数组里
+        // 如果没有... 会把获取的数组，直接放到另一个数组里，相当于整体放进去
+        this.goods[type].list.push(...result.data.list)
+        this.goods[type].page += 1;
+
+        this.$refs.scroll.scroll.finishPullUp()
+      })
+    }
   }
 }
 </script>
@@ -196,7 +238,9 @@ export default {
 <style scoped>
 
 #home {
-  padding-top: 44px;
+  /*padding-top: 44px;*/
+  height: 100vh;
+  position: relative;
 }
 
 .home-nav {
@@ -215,6 +259,19 @@ export default {
 .tab-control {
   position: sticky;
   top: 44px;
+  z-index: 9;
+}
+
+.content {
+  overflow: hidden;
+  position: absolute;
+  top: 44px;
+  bottom: 49px;
+  left: 0;
+  right: 0;
+}
+.tab-control {
+  z-index: 10;
 }
 
 </style>

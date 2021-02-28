@@ -1,6 +1,6 @@
 <template>
   <div>
-    <scroll class="content">
+    <scroll class="content" v-bind:probe-type="1">
       <ul>
         <li>个人信息1</li>
         <li>个人信息2</li>
@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import Scroll from '@/components/common/scroll/Scroll'
+import Scroll from "@/components/common/scroll/Scroll";
 
 export default {
   name: 'Profile',

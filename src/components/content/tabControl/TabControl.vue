@@ -27,7 +27,9 @@ export default {
   methods: {
     // 传递变量过来
     itemClick(index) {
-      this.currentIndex = index
+      this.currentIndex = index;
+      // 传递子组件的事件给父组件
+      this.$emit('tabClick', index) // 第一个参数自定义， 第二个传递参数
     }
   }
 }
