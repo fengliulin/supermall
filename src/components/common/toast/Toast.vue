@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       message: '',
-      isShow: true
+      isShow: false
     }
   },
   methods: {
@@ -38,8 +38,8 @@ export default {
         this.isShow = false
         this.message = ''
 
-        // 无法这样设置样式
-        document.querySelector(".toast").style.backgroundColor="#FF0000"
+        // 可以这样设置
+        document.querySelector(".toast").style.backgroundColor="#0022ff"
 
         // 获取属性
         console.log( document.querySelector(".toast").attributes[document.querySelector(".toast").getAttributeNames()[3]])
