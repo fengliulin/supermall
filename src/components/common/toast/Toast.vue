@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       message: '',
-      isShow: false
+      isShow: true
     }
   },
   methods: {
@@ -35,8 +35,14 @@ export default {
       this.message = message
 
       setTimeout(() => {
-        this.show = false
+        this.isShow = false
         this.message = ''
+
+        // 无法这样设置样式
+        document.querySelector(".toast").style.backgroundColor="#FF0000"
+
+        // 获取属性
+        console.log( document.querySelector(".toast").attributes[document.querySelector(".toast").getAttributeNames()[3]])
       }, duration)
     }
   }
