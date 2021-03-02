@@ -7,6 +7,10 @@ import toast from "./components/common/toast"
 
 import FastClick from 'fastclick'
 
+import VueLazyload from 'vue-lazyload'
+
+Vue.use(VueLazyload)
+
 // 安装toast插件
 Vue.use(toast) // 插件会调用对象.install
 
